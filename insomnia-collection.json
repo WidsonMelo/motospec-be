@@ -1,0 +1,84 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "resources": [
+    {
+      "_type": "request_group",
+      "_id": "fld_motospec",
+      "name": "MotoSpec API",
+      "description": "API de gerenciamento de motos com JWT"
+    },
+    {
+      "_type": "request",
+      "_id": "req_register",
+      "parentId": "fld_motospec",
+      "name": "Register",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/auth/register",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"novousuario\",\n  \"password\": \"senha123\",\n  \"role\": \"USER\"\n}"
+      }
+    },
+    {
+      "_type": "request",
+      "_id": "req_login",
+      "parentId": "fld_motospec",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/auth/login",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+      }
+    },
+    {
+      "_type": "request",
+      "_id": "req_list_motos",
+      "parentId": "fld_motospec",
+      "name": "Listar Motos (Paginado)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/motos?page=0&size=10",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_get_moto",
+      "parentId": "fld_motospec",
+      "name": "Buscar Moto por ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/motos/1",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.token }}"
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "_type": "environment",
+    "name": "MotoSpec Environment",
+    "data": {
+      "base_url": "http://localhost:8080",
+      "token": ""
+    }
+  }
+}

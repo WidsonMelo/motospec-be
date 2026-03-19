@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "MotoSpec API",
+    "description": "API de gerenciamento de motos com autenticação JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"novousuario\",\n  \"password\": \"senha123\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Registra um novo usuário no sistema"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", jsonData.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Autentica um usuário e retorna um access token JWT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Motos",
+      "item": [
+        {
+          "name": "Listar Motos (Paginado)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/motos?page=0&size=10&sort=id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "motos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número da página (começa em 0)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamanho da página"
+                },
+                {
+                  "key": "sort",
+                  "value": "id",
+                  "description": "Campo de ordenação"
+                }
+              ]
+            },
+            "description": "Retorna uma lista paginada de motos"
+          }
+        },
+        {
+          "name": "Buscar Moto por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/motos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "motos", "1"]
+            },
+            "description": "Retorna o detalhamento de uma moto específica"
+          }
+        }
+      ]
+    }
+  ]
+}
